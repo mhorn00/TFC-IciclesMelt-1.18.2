@@ -1,0 +1,109 @@
+buildscript {
+    repositories {
+        // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
+        maven { url = 'https://maven.minecraftforge.net' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.spongepowered:mixingradle:0.7.+'
+    }
+}
+// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+plugins {
+    id 'eclipse'
+    id 'maven-publish'
+}
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.spongepowered.mixin'
+
+version = '1.0'
+group = 'xyz.sarcly.tfc_iciclesmelt'
+archivesBaseName = 'tfc_iciclesmelt'
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
+minecraft {
+    mappings channel: 'official', version: '1.18.2'
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'	
+			property("mixin.env.remapRefMap", "true")
+            property("mixin.env.refMapRemappingFile", "$projectDir/build/createSrgToMcp/output.srg")
+
+            mods {
+                tfc_iciclesmelt {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            property("mixin.env.remapRefMap", "true")
+            property("mixin.env.refMapRemappingFile", "$projectDir/build/createSrgToMcp/output.srg")
+            mods {
+                tfc_iciclesmelt {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+mixin {
+    add sourceSets.main, 'tfc_iciclesmelt.refmap.json'
+    config 'tfc_iciclesmelt.mixins.json'
+}
+
+repositories {
+    maven {
+        url 'https://www.cursemaven.com'
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+	maven { url 'https://maven.blamejared.com' } //Patchouli
+	maven { url 'https://dvs1.progwml6.com/files/maven/' } //JEI
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.18.2-40.1.86'
+    
+	implementation fg.deobf("curse.maven:terrafirmacraft-302973:4552678")
+	
+	compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.1.232:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.1.232")
+
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.2-70")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.18.2-70")
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+}
+
+jar {
+    manifest {
+        attributes([
+                "Specification-Title"     : "TFC Icicles Melt",
+                "Specification-Vendor"    : "Sarcly",
+                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : project.jar.archiveVersion,
+                "Implementation-Vendor"   : "Look At That View",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+jar.finalizedBy('reobfJar')
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}

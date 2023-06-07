@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "xyz.sarcly.tfc_iciclesmelt.mixins",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+	"EnvironmentHelpersMixin",
+	"IcicleBlockMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "refmap": "tfc_iciclesmelt.refmap.json"
+}
