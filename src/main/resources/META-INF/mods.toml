@@ -1,15 +1,13 @@
 modLoader="javafml"
 loaderVersion="[40,)"
 license="All rights reserved"
-#issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/"
+issueTrackerURL="https://github.com/mhorn00/TFC-IciclesMelt-1.18.2/issues"
 
 [[mods]]
 modId="tfc_iciclesmelt"
-version="0.0.1"
+version="0.1"
 displayName="TFC Icicles Melt"
-#updateJSONURL="https://change.me.example.invalid/updates.json"
-#displayURL="https://change.me.to.your.mods.homepage.example.invalid/"
-logoFile="examplemod.png"
+displayURL="https://github.com/mhorn00/TFC-IciclesMelt-1.18.2"
 credits="Thanks to me for making this lol"
 authors="Sarcly"
 description='''
@@ -19,7 +17,7 @@ I got annoyed that icicles dont melt with light sources like snow layers and ice
 [[dependencies.tfc_iciclesmelt]]
 	modId="tfc"
 	mandatory=true
-	versionRange="[2.2.23,)"
+	versionRange="[0,)"
 	ordering="AFTER"
 	side="BOTH"
 
